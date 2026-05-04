@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: ghcr.io/mercyshark/demoapp:sha-2fdde85
+        image: 
         ports:
         - containerPort: 80
