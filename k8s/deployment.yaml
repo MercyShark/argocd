@@ -6,7 +6,7 @@ metadata:
   annotations:
     kubernetes.io/change-cause: "Deploy ghcr.io/mercyshark/demoapp:sha-f0f8da2"
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 3
   selector:
     matchLabels:
