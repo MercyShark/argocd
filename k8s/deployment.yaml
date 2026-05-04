@@ -21,6 +21,21 @@ spec:
         image: ghcr.io/mercyshark/demoapp:sha-18c16eb
         ports:
         - containerPort: 8000
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "512Mi"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          
+
 
 
 ---
