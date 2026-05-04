@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-app-deployment
+  annotations:
+    kubernetes.io/change-cause: "Updated backend app image to version 2"
 spec:
   replicas: 2
   selector:
