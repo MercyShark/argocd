@@ -21,6 +21,12 @@ spec:
         image: ghcr.io/mercyshark/demoapp:sha-18c16eb
         ports:
         - containerPort: 8000
+        env:
+        - name: TEST_ENV_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: MY_NAME
         resources:
           requests:
             cpu: "200m"
@@ -34,7 +40,7 @@ spec:
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 10
-          
+
 
 
 
