@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: backend-app-deployment
   annotations:
-    kubernetes.io/change-cause: "Deploy ghcr.io/mercyshark/demoapp:sha-dc18ced"
+    kubernetes.io/change-cause: "Deploy ghcr.io/mercyshark/demoapp:sha-18c16eb"
 spec:
   replicas: 2
   selector:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend-app
-        image: ghcr.io/mercyshark/demoapp:sha-dc18ced
+        image: ghcr.io/mercyshark/demoapp:sha-18c16eb
         ports:
         - containerPort: 8000
 
