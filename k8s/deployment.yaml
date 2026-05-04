@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: backend-app
-        image: ghcr.io/mercyshark/demoapp:sha-66ac563
+        image: ghcr.io/mercyshark/demoapp:sha-e4732f3
         ports:
         - containerPort: 8000
