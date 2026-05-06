@@ -1,8 +1,8 @@
-# nginx-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-app-deployment
+  namespace: default
   annotations:
     kubernetes.io/change-cause: "Deploy ghcr.io/mercyshark/demoapp:sha-628ce2a"
 spec:
@@ -17,45 +17,59 @@ spec:
         app: backend-app
     spec:
       containers:
-      - name: backend-app
-        image: ghcr.io/mercyshark/demoapp:sha-628ce2a
-        ports:
-        - containerPort: 8000
-        env:
-        - name: TEST_ENV_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: app-config
-              key: MY_NAME
-        resources:
-          requests:
-            cpu: "200m"
-            memory: "256Mi"
-          limits:
-            cpu: "1"
-            memory: "512Mi"
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 10
-
-
-
-
+        - name: backend-app
+          image: ghcr.io/mercyshark/demoapp:sha-628ce2a
+          ports:
+            - containerPort: 8000
+          env:
+            - name: TEST_ENV_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: MY_NAME
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: backend-app-service
-  labels:
+  namespace: default
+  labels:               # ✅ FIXED: was missing the `labels:` key
     app: backend-app
 spec:
   selector:
     app: backend-app
   ports:
-  - name: http
-    port: 8000
-    targetPort: 8000
-
+    - name: http
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: my-app-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus   # ✅ ADDED: required by Prometheus Operator to discover this ServiceMonitor
+spec:
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      app: backend-app    # ✅ Now matches the Service's labels correctly
+  endpoints:
+    - port: http
+      path: /metrics
